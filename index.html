@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鵬程工程顧問｜AI 導入提升產出效率提案</title>
+<style>
+:root {
+  --blue-dark: #0f2942;
+  --blue-mid: #1a4a7a;
+  --blue-light: #2d7dd2;
+  --blue-pale: #e8f4ff;
+  --accent: #00c6ff;
+  --text: #1a1a2e;
+  --gray: #f4f7fb;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif; color: var(--text); background: #fff; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(15,41,66,0.96); backdrop-filter: blur(8px);
+  padding: 0 1rem; height: 54px; display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand { color: #fff; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.02em; }
+.nav-brand span { color: var(--accent); }
+.nav-toggle { background: none; border: none; color: #fff; font-size: 1.4rem; cursor: pointer; padding: 4px 8px; }
+.nav-menu {
+  display: none; position: fixed; top: 54px; left: 0; right: 0;
+  background: rgba(15,41,66,0.98); padding: 1rem 0; z-index: 99;
+}
+.nav-menu.open { display: block; }
+.nav-menu a {
+  display: block; padding: 0.75rem 1.5rem; color: rgba(255,255,255,0.85);
+  text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.07);
+  transition: color 0.2s;
+}
+.nav-menu a:hover { color: var(--accent); }
+
+/* HERO */
+.hero {
+  min-height: 100svh; background: linear-gradient(135deg, var(--blue-dark) 0%, #0d3b6e 50%, #0a2545 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 90px 1.5rem 3rem; text-align: center; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 60%, rgba(0,198,255,0.12) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(45,125,210,0.15) 0%, transparent 50%);
+}
+.hero-badge {
+  display: inline-block; padding: 0.3rem 0.9rem; border-radius: 999px;
+  border: 1px solid rgba(0,198,255,0.4); color: var(--accent); font-size: 0.75rem;
+  letter-spacing: 0.08em; margin-bottom: 1.5rem; position: relative;
+}
+.hero h1 { font-size: clamp(1.8rem, 6vw, 2.8rem); font-weight: 800; color: #fff; line-height: 1.2; position: relative; }
+.hero h1 span { color: var(--accent); }
+.hero-sub { margin-top: 1rem; color: rgba(255,255,255,0.7); font-size: 0.95rem; position: relative; }
+.hero-meta { display: flex; gap: 0.75rem; margin-top: 0.5rem; justify-content: center; flex-wrap: wrap; }
+.hero-meta span { color: rgba(255,255,255,0.5); font-size: 0.8rem; }
+.hero-flow {
+  display: flex; align-items: center; gap: 0.5rem; margin-top: 2.5rem;
+  background: rgba(255,255,255,0.07); border-radius: 12px; padding: 1rem 1.5rem;
+  position: relative; flex-wrap: wrap; justify-content: center;
+}
+.flow-box {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px; padding: 0.5rem 1rem; color: #fff; font-size: 0.85rem; font-weight: 600;
+}
+.flow-box.ai { background: rgba(0,198,255,0.2); border-color: var(--accent); color: var(--accent); }
+.flow-arrow { color: rgba(255,255,255,0.4); font-size: 1.2rem; }
+.hero-tags { display: flex; gap: 0.5rem; margin-top: 1.5rem; flex-wrap: wrap; justify-content: center; position: relative; }
+.hero-tags span {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 999px; padding: 0.3rem 0.9rem; color: rgba(255,255,255,0.75); font-size: 0.8rem;
+}
+.scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.3); font-size: 0.75rem; animation: bounce 2s infinite; }
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+/* SECTIONS */
+section { padding: 3rem 1.25rem; }
+section:nth-child(odd) { background: #fff; }
+section:nth-child(even) { background: var(--gray); }
+.section-label { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue-light); font-weight: 700; margin-bottom: 0.5rem; }
+.section-title { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; color: var(--blue-dark); line-height: 1.2; }
+.section-title span { color: var(--blue-light); }
+.section-desc { margin-top: 1rem; color: #444; font-size: 0.95rem; line-height: 1.75; }
+
+/* OVERVIEW */
+.overview-grid { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-top: 2rem; }
+.flow-step {
+  background: #fff; border-radius: 12px; padding: 1rem 1.25rem;
+  border-left: 4px solid var(--blue-light); box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  display: flex; align-items: flex-start; gap: 1rem;
+}
+.flow-step.extra { border-left-color: var(--accent); }
+.step-num { font-size: 1.4rem; font-weight: 900; color: var(--blue-light); min-width: 36px; }
+.flow-step.extra .step-num { color: var(--accent); }
+.step-body h3 { font-size: 0.95rem; font-weight: 700; color: var(--blue-dark); }
+.step-body p { font-size: 0.82rem; color: #666; margin-top: 0.2rem; line-height: 1.5; }
+.step-body .ai-tag {
+  display: inline-block; margin-top: 0.4rem;
+  background: var(--blue-pale); color: var(--blue-mid); border-radius: 999px;
+  font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.6rem;
+}
+
+/* APP SLIDES */
+.app-card {
+  background: #fff; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-top: 2rem;
+}
+.app-card-header {
+  background: linear-gradient(135deg, var(--blue-dark), var(--blue-mid));
+  padding: 1.25rem 1.5rem;
+}
+.app-card-header .num { font-size: 0.75rem; color: var(--accent); letter-spacing: 0.1em; font-weight: 700; }
+.app-card-header h2 { font-size: 1.2rem; font-weight: 800; color: #fff; margin-top: 0.25rem; }
+.app-card-header .tool { margin-top: 0.5rem; display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(255,255,255,0.12); border-radius: 999px; padding: 0.25rem 0.75rem; }
+.app-card-header .tool-icon { font-size: 0.85rem; }
+.app-card-header .tool-name { font-size: 0.78rem; color: rgba(255,255,255,0.85); font-weight: 600; }
+.app-card-body { padding: 1.25rem 1.5rem; }
+.app-card-body .result {
+  background: var(--blue-pale); border-left: 3px solid var(--blue-light);
+  border-radius: 0 8px 8px 0; padding: 0.75rem 1rem; font-size: 0.88rem;
+  color: var(--blue-dark); line-height: 1.65; margin-bottom: 1.25rem;
+}
+.app-card-body .result strong { color: var(--blue-mid); }
+.slide-imgs { display: grid; gap: 0.75rem; }
+.slide-imgs.cols-2 { grid-template-columns: 1fr 1fr; }
+.slide-imgs img {
+  width: 100%; border-radius: 10px; cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;
+  display: block;
+}
+.slide-imgs img:hover { transform: scale(1.02); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+.pending-badge {
+  background: #fff8e1; border: 1px solid #ffc107; border-radius: 10px;
+  padding: 1rem 1.25rem; color: #7a5c00; font-size: 0.88rem; display: flex; align-items: center; gap: 0.75rem;
+}
+
+/* SCHEDULE */
+.schedule-img { width: 100%; border-radius: 12px; margin-top: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+/* PRICING */
+.pricing-grid { display: grid; gap: 1rem; margin-top: 1.5rem; }
+.price-card {
+  background: #fff; border-radius: 14px; overflow: hidden;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.08);
+}
+.price-card-head {
+  background: var(--blue-dark); padding: 1rem 1.25rem;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.price-card-head .icon { font-size: 1.3rem; }
+.price-card-head h3 { color: #fff; font-size: 1rem; font-weight: 700; }
+.price-card-body { padding: 1.25rem; }
+.price-item { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid #f0f0f0; font-size: 0.88rem; }
+.price-item:last-child { border-bottom: none; }
+.price-item .label { color: #555; }
+.price-item .val { font-weight: 700; color: var(--blue-dark); }
+.price-total { background: var(--blue-pale); border-radius: 8px; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; }
+.price-total .label { font-size: 0.88rem; color: var(--blue-mid); font-weight: 700; }
+.price-total .val { font-size: 1.1rem; font-weight: 900; color: var(--blue-dark); }
+
+.service-options { display: grid; gap: 0.75rem; margin-top: 1rem; }
+.service-opt {
+  border: 2px solid var(--blue-pale); border-radius: 12px; padding: 1rem 1.25rem;
+}
+.service-opt.highlight { border-color: var(--blue-light); background: var(--blue-pale); }
+.service-opt h4 { font-size: 0.95rem; color: var(--blue-dark); font-weight: 700; }
+.service-opt .price-row { display: flex; gap: 0.75rem; margin-top: 0.5rem; flex-wrap: wrap; }
+.service-opt .price-tag {
+  background: #fff; border: 1px solid var(--blue-light); border-radius: 8px;
+  padding: 0.3rem 0.75rem; font-size: 0.8rem; color: var(--blue-mid); font-weight: 700;
+}
+.service-note { font-size: 0.78rem; color: #888; margin-top: 0.4rem; }
+.includes { margin-top: 1rem; }
+.includes h4 { font-size: 0.85rem; font-weight: 700; color: var(--blue-dark); margin-bottom: 0.5rem; }
+.includes li { font-size: 0.85rem; color: #555; padding: 0.3rem 0; padding-left: 1.25rem; position: relative; list-style: none; }
+.includes li::before { content: '✓'; position: absolute; left: 0; color: var(--blue-light); font-weight: 700; }
+
+/* CTA */
+.cta-section {
+  background: linear-gradient(135deg, var(--blue-dark), #0d3b6e);
+  padding: 3rem 1.5rem; text-align: center;
+}
+.cta-section h2 { font-size: 1.5rem; font-weight: 800; color: #fff; }
+.cta-section p { color: rgba(255,255,255,0.7); margin-top: 0.75rem; font-size: 0.9rem; line-height: 1.7; }
+.cta-btn {
+  display: inline-block; margin-top: 2rem; padding: 0.9rem 2rem;
+  background: var(--accent); color: var(--blue-dark); font-weight: 800;
+  border-radius: 999px; text-decoration: none; font-size: 1rem;
+  box-shadow: 0 4px 20px rgba(0,198,255,0.35); transition: transform 0.2s;
+}
+.cta-btn:hover { transform: translateY(-2px); }
+
+/* FOOTER */
+footer { background: #0a1f33; padding: 2rem 1.5rem; text-align: center; color: rgba(255,255,255,0.4); font-size: 0.8rem; line-height: 2; }
+
+/* LIGHTBOX */
+#lightbox {
+  display: none; position: fixed; inset: 0; z-index: 999;
+  background: rgba(0,0,0,0.92); align-items: center; justify-content: center;
+  padding: 1rem;
+}
+#lightbox.active { display: flex; }
+#lightbox img { max-width: 100%; max-height: 90svh; border-radius: 8px; object-fit: contain; }
+#lightbox-close {
+  position: absolute; top: 1rem; right: 1rem;
+  background: rgba(255,255,255,0.15); border: none; color: #fff;
+  width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
+@media (min-width: 600px) {
+  .overview-grid { grid-template-columns: 1fr 1fr; }
+  .pricing-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 900px) {
+  .nav-toggle { display: none; }
+  .nav-menu { display: flex !important; position: static; background: transparent; padding: 0; gap: 0.25rem; }
+  .nav-menu a { padding: 0.4rem 0.75rem; border: none; font-size: 0.82rem; border-radius: 6px; }
+  .nav-menu a:hover { background: rgba(255,255,255,0.1); }
+  section { padding: 4rem 2rem; max-width: 900px; margin: 0 auto; }
+  .overview-grid { grid-template-columns: 1fr 1fr 1fr; }
+  .pricing-grid { grid-template-columns: repeat(3, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">鵬程工程顧問｜<span>AI 提案</span></div>
+  <button class="nav-toggle" onclick="toggleNav()">☰</button>
+  <div class="nav-menu" id="navMenu">
+    <a href="#overview" onclick="closeNav()">10 大應用</a>
+    <a href="#apps" onclick="closeNav()">落地案例</a>
+    <a href="#schedule" onclick="closeNav()">課綱時程</a>
+    <a href="#pricing" onclick="closeNav()">費用試算</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">2026 年 5 月提案</div>
+  <h1>AI 導入<span>提升產出效率</span>提案</h1>
+  <p class="hero-sub">鵬程工程顧問有限公司</p>
+  <div class="hero-meta">
+    <span>提案人：Mike</span>
+  </div>
+  <div class="hero-flow">
+    <div class="flow-box">INPUT<br><small style="font-weight:400;opacity:.7">業務資料</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box ai">AI<br><small style="font-weight:400;opacity:.8">助理加速</small></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">OUTPUT<br><small style="font-weight:400;opacity:.7">高效產出</small></div>
+  </div>
+  <div class="hero-tags">
+    <span>提案效率</span>
+    <span>資料整合</span>
+    <span>知識留存</span>
+  </div>
+  <div class="scroll-hint">↓ 往下看</div>
+</section>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="section-label">AI 落地 10 大應用</div>
+  <h2 class="section-title">針對鵬程<span>客製化</span>設計</h2>
+  <p class="section-desc">從爬案、提案、評選到結案備存，將 AI 變成專案加速器。AI 工具導入需建置與學習成本，但學習後提升的產出效率<strong>勢必大於 AI 導入花費的成本</strong>。</p>
+
+  <div class="overview-grid">
+    <div class="flow-step">
+      <div class="step-num">01</div>
+      <div class="step-body">
+        <h3>爬案件</h3>
+        <p>每日自動爬、篩選、通知</p>
+        <span class="ai-tag">Claude Code Agent</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">02</div>
+      <div class="step-body">
+        <h3>服務建議書</h3>
+        <p>AI 協助產出圖文優化內容</p>
+        <span class="ai-tag">GPT 生圖功能</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">03</div>
+      <div class="step-body">
+        <h3>評選簡報</h3>
+        <p>AI 依據建議書直接生成簡報</p>
+        <span class="ai-tag">Gemini NotebookLM</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">04</div>
+      <div class="step-body">
+        <h3>圖說預算（面積）</h3>
+        <p>AI 快速計算面積並提供思維邏輯</p>
+        <span class="ai-tag">Claude</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">05</div>
+      <div class="step-body">
+        <h3>圖說預算（比對）</h3>
+        <p>AI 比對文件內容，降低出錯風險</p>
+        <span class="ai-tag">Gemini NotebookLM</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">06</div>
+      <div class="step-body">
+        <h3>監造查核簡報</h3>
+        <p>AI 彙整零散資料整合成簡報</p>
+        <span class="ai-tag">待測試</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">07</div>
+      <div class="step-body">
+        <h3>結案備存</h3>
+        <p>AI 建置歷史案件資料庫方便查詢</p>
+        <span class="ai-tag">Claude Code Agent</span>
+      </div>
+    </div>
+    <div class="flow-step extra">
+      <div class="step-num">08</div>
+      <div class="step-body">
+        <h3>錄音轉逐字稿</h3>
+        <p>AI 轉換會議錄音並整理重點</p>
+        <span class="ai-tag">Gemini NotebookLM</span>
+      </div>
+    </div>
+    <div class="flow-step extra">
+      <div class="step-num">09</div>
+      <div class="step-body">
+        <h3>公司網站建置</h3>
+        <p>AI 快速產製網頁，提升 SEO</p>
+        <span class="ai-tag">Claude Code Agent</span>
+      </div>
+    </div>
+    <div class="flow-step extra">
+      <div class="step-num">10</div>
+      <div class="step-body">
+        <h3>2D 轉 3D 模型</h3>
+        <p>AI 直接產出可用的 3D 模型</p>
+        <span class="ai-tag">Modly（地端 AI）</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPS DETAIL -->
+<section id="apps" style="background:var(--gray)">
+  <div class="section-label">實際落地展示</div>
+  <h2 class="section-title">10 項應用<span>驗證成果</span></h2>
+  <p class="section-desc">每項應用皆已實際測試，以下為真實操作截圖與驗證結果。</p>
+
+  <!-- App 01 -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <div class="num">應用 01 ｜ 爬案件</div>
+      <h2>AI 每日自動爬、篩選、通知</h2>
+      <div class="tool"><span class="tool-icon">🤖</span><span class="tool-name">Claude Code Agent — AI 助理</span></div>
+    </div>
+    <div class="app-card-body">
+      <div class="result">✅ 確認 AI 助理可協助<strong>每天定時爬案件</strong>，知悉公司有豐富的篩選邏輯；可訓練 AI 學習公司的判斷標準，實現全自動化通知。</div>
+      <div class="slide-imgs">
+        <img src="images/slide03_img01.jpg" alt="爬案件截圖" onclick="openLightbox(this)">
+      </div>
+    </div>
+  </div>
+
+  <!-- App 02 -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <div class="num">應用 02 ｜ 服務建議書</div>
+      <h2>AI 協助產出圖文優化內容</h2>
+      <div class="tool"><span class="tool-icon">🎨</span><span class="tool-name">GPT — 生圖功能</span></div>
+    </div>
+    <div class="app-card-body">
+      <div class="result">✅ 確認可透過 AI <strong>快速把線稿圖穩定地依需求上色</strong>，提升產出效率。<br>＜5 月最新：AI 已支援直接產出 PSD 和 SVG 格式＞</div>
+      <div class="slide-imgs cols-2">
+        <img src="images/slide04_img01.jpg" alt="AI 生圖示範 1" onclick="openLightbox(this)">
+        <img src="images/slide04_img02.jpg" alt="AI 生圖示範 2" onclick="openLightbox(this)">
+      </div>
+    </div>
+  </div>
+
+  <!-- App 03 -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <div class="num">應用 03 ｜ 評選簡報</div>
+      <h2>AI 依據建議書直接生成簡報</h2>
+      <div class="tool"><span class="tool-icon">📊</span><span class="tool-name">Gemini — NotebookLM</span></div>
+    </div>
+    <div class="app-card-body">
+      <div class="result">✅ 確認 AI 助理可直接依據建議書<strong>生成美化後的評選簡報</strong>，並支援直接編輯或透過指令進行調整。</div>
+      <div class="slide-imgs">
+        <img src="images/slide05_img01.jpg" alt="NotebookLM 截圖 1" onclick="openLightbox(this)">
+        <img src="images/slide05_img02.jpg" alt="NotebookLM 截圖 2" onclick="openLightbox(this)">
+      </div>
+    </div>
+  </div>
+
+  <!-- App 04 -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <div class="num">應用 04 ｜ 圖說預算</div>
+      <h2>AI 計算面積</h2>
+      <div class="tool"><span class="tool-icon">📐</span><span class="tool-name">Claude</span></div>
+    </div>
+    <div class="app-card-body">
+      <div class="result">✅ 確認 AI 可協助<strong>快速計算面積</strong>，且會提供完整的過程思維邏輯，方便使用者逐步檢視驗算。</div>
+      <div class="slide-imgs">
+        <img src="images/slide06_img01.jpg" alt="Claude 面積計算截圖" onclick="openLightbox(this)">
+      </div>
+    </div>
+  </div>
+
+  <!-- App 05 -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <div class="num">應用 05 ｜ 圖說預算</div>
+      <h2>AI 比對與檢查資料</h2>
+      <div class="tool"><span class="tool-icon">🔍</span><span class="tool-name">Gemini — NotebookLM</span></div>
+    </div>
+    <div class="app-card-body">
+      <div class="result">✅ 確認 AI 可協助<strong>比對文件內容與數量</strong>，有效降低預算評估出錯的風險。</div>
+      <div class="slide-imgs">
+        <img src="images/slide07_img01.jpg" alt="Gemini 比對截圖" onclick="openLightbox(this)">
+      </div>
+    </div>
+  </div>
+
+  <!-- App 06 -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <div class="num">應用 06 ｜ 監造查核簡報</div>
+      <h2>AI 彙整零散資料整合成簡報</h2>
+      <div class="tool"><span class="tool-icon">⏳</span><span class="tool-name">待範例提供後測試</span></div>
+    </div>
+    <div class="app-card-body">
+      <div class="pending-badge">
+        📋 欠缺範例協助測試落地應用情境。<br>提供真實監造資料後即可完成驗證。
+      </div>
+    </div>
+  </div>
+
+  <!-- App 07 -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <div class="num">應用 07 ｜ 結案備存</div>
+      <h2>AI 建置歷史案件資料庫</h2>
+      <div class="tool"><span class="tool-icon">🗃️</span><span class="tool-name">Claude Code Agent — AI 助理</span></div>
+    </div>
+    <div class="app-card-body">
+      <div class="result">✅ 確認把資料給 AI 助理後，它可協助<strong>歸檔、找資料、彙整資訊</strong>，成為公司的智慧型檔案管理員。</div>
+      <div class="slide-imgs cols-2">
+        <img src="images/slide09_img01.jpg" alt="結案備存截圖 1" onclick="openLightbox(this)">
+        <img src="images/slide09_img02.jpg" alt="結案備存截圖 2" onclick="openLightbox(this)">
+      </div>
+    </div>
+  </div>
+
+  <!-- App 08 -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <div class="num">應用 08 ｜ 其他應用</div>
+      <h2>AI 將錄音檔轉逐字稿與重點整理</h2>
+      <div class="tool"><span class="tool-icon">🎙️</span><span class="tool-name">Gemini — NotebookLM</span></div>
+    </div>
+    <div class="app-card-body">
+      <div class="result">✅ 以 1 小時 19 分鐘的 YouTube 影片作為測試範例，確認 AI 可協助轉換成完整的「<strong>逐字稿</strong>」與「<strong>重點整理</strong>」。</div>
+      <div class="slide-imgs">
+        <img src="images/slide10_img01.jpg" alt="逐字稿截圖 1" onclick="openLightbox(this)">
+        <img src="images/slide10_img02.jpg" alt="逐字稿截圖 2" onclick="openLightbox(this)">
+      </div>
+    </div>
+  </div>
+
+  <!-- App 09 -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <div class="num">應用 09 ｜ 其他應用</div>
+      <h2>AI 公司網站建置與維運更新</h2>
+      <div class="tool"><span class="tool-icon">🌐</span><span class="tool-name">Claude Code Agent — AI 助理</span></div>
+    </div>
+    <div class="app-card-body">
+      <div class="result">✅ 確認可透過 AI 助理快速產製、調整網頁，提升公司網站 SEO 分數、<strong>降低網頁維運人力</strong>。</div>
+      <div class="slide-imgs">
+        <img src="images/slide11_img01.jpg" alt="網站截圖 1" onclick="openLightbox(this)">
+        <img src="images/slide11_img02.jpg" alt="網站截圖 2" onclick="openLightbox(this)">
+      </div>
+    </div>
+  </div>
+
+  <!-- App 10 -->
+  <div class="app-card">
+    <div class="app-card-header">
+      <div class="num">應用 10 ｜ 加碼教學</div>
+      <h2>AI 將 2D 圖直接產出可用的 3D 模型</h2>
+      <div class="tool"><span class="tool-icon">🏗️</span><span class="tool-name">地端開源 AI — Modly（需 RTX 4060 以上顯卡）</span></div>
+    </div>
+    <div class="app-card-body">
+      <div class="result">✅ 可透過 AI 把 2D 圖直接轉成 3D 模型，且可<strong>匯出為 CAD 可使用的檔案格式</strong>，大幅降低建模工時。</div>
+      <div class="slide-imgs cols-2">
+        <img src="images/slide12_img01.jpg" alt="2D 轉 3D 截圖 1" onclick="openLightbox(this)">
+        <img src="images/slide12_img02.jpg" alt="2D 轉 3D 截圖 2" onclick="openLightbox(this)">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section id="schedule">
+  <div class="section-label">課程規劃</div>
+  <h2 class="section-title">預計<span>課綱與時程</span></h2>
+  <p class="section-desc">涵蓋專案提案與執行流程 + 其他節省人力運用，循序漸進地導入 AI 工具。</p>
+  <img class="schedule-img" src="images/slide13_img01.jpg" alt="課綱時程表" onclick="openLightbox(this)" style="cursor:pointer">
+</section>
+
+<!-- PRICING -->
+<section id="pricing" style="background:var(--gray)">
+  <div class="section-label">投資報酬估算</div>
+  <h2 class="section-title">AI 導入<span>成本預估</span></h2>
+  <p class="section-desc">每月訂閱 + 一次性硬體 + 專業導入服務，以下為透明公開的費用說明。</p>
+
+  <div class="pricing-grid">
+    <!-- 月訂閱 -->
+    <div class="price-card">
+      <div class="price-card-head">
+        <div class="icon">📅</div>
+        <h3>每月訂閱成本</h3>
+      </div>
+      <div class="price-card-body">
+        <div class="price-item"><span class="label">Notebook LM + Gemini Advanced<br><small>5 人共用 1 組</small></span><span class="val">US$20/月</span></div>
+        <div class="price-item"><span class="label">ChatGPT Plus<br><small>3 人共用 1 組</small></span><span class="val">US$20/月</span></div>
+        <div class="price-item"><span class="label">Claude Pro<br><small>主管共用</small></span><span class="val">US$20/月</span></div>
+        <div class="price-item"><span class="label">AI 助理<br><small>依人數需求調整</small></span><span class="val">另議</span></div>
+        <p class="service-note" style="margin-top:.75rem">將協助說明如何共用，藉此降低公司訂閱成本。</p>
+      </div>
+    </div>
+
+    <!-- 硬體 -->
+    <div class="price-card">
+      <div class="price-card-head">
+        <div class="icon">💻</div>
+        <h3>硬體設備（一次性）</h3>
+      </div>
+      <div class="price-card-body">
+        <div class="price-item"><span class="label">Mac mini 16G/512G</span><span class="val">$26,900</span></div>
+        <div class="price-item"><span class="label">無線鍵盤滑鼠</span><span class="val">$1,090</span></div>
+        <div class="price-item"><span class="label">Mac 擴充基座</span><span class="val">$2,000</span></div>
+        <div class="price-item"><span class="label">SSD 固態硬碟 1TB</span><span class="val">$6,500</span></div>
+        <div class="price-total"><span class="label">合計</span><span class="val">約 $36,490</span></div>
+        <p class="service-note" style="margin-top:.75rem">此 Mac 只幫買和設定，無額外獲利。如公司有類似設備則無須購買。<br>⚠️ 不建置 AI 助理需捨棄：①爬案件、⑦結案備存、公司網站建置。</p>
+      </div>
+    </div>
+
+    <!-- 服務費 -->
+    <div class="price-card">
+      <div class="price-card-head">
+        <div class="icon">🎓</div>
+        <h3>專業導入服務（一次性、未稅）</h3>
+      </div>
+      <div class="price-card-body">
+        <div class="service-options">
+          <div class="service-opt highlight">
+            <h4>含 AI 助理建置｜8 小時</h4>
+            <p class="service-note">本收費 $50,000 → <strong>6 折優惠</strong></p>
+            <div class="price-row">
+              <div class="price-tag">假日 8H｜$30,000</div>
+              <div class="price-tag">平日 8H｜$36,000</div>
+            </div>
+          </div>
+          <div class="service-opt">
+            <h4>無 AI 助理建置｜6 小時</h4>
+            <p class="service-note">本收費 $37,500 → <strong>6 折優惠</strong></p>
+            <div class="price-row">
+              <div class="price-tag">假日 6H｜$22,500</div>
+              <div class="price-tag">平日 6H｜$28,500</div>
+            </div>
+          </div>
+        </div>
+        <ul class="includes">
+          <h4>服務內容包含</h4>
+          <li>工作實際應用情境備課與授課</li>
+          <li>AI 助理與模型設定與建置教學</li>
+          <li>課後 1 個月免費諮詢服務</li>
+        </ul>
+        <p class="service-note" style="margin-top:.75rem">平日有請假成本，故收費較高，敬請見諒。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>讓 AI 成為鵬程的競爭優勢</h2>
+  <p>從爬案到結案，每個環節都加速。<br>導入後提升的產出效率，勢必大於 AI 花費的月成本。</p>
+  <a class="cta-btn" href="mailto:">立即聯繫討論</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>鵬程工程顧問有限公司｜AI 導入提升產出效率提案</div>
+  <div>2026 年 5 月｜提案人：Mike</div>
+</footer>
+
+<script>
+function toggleNav() {
+  document.getElementById('navMenu').classList.toggle('open');
+}
+function closeNav() {
+  document.getElementById('navMenu').classList.remove('open');
+}
+function openLightbox(img) {
+  document.getElementById('lightbox-img').src = img.src;
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
+
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+</script>
+</body>
+</html>
