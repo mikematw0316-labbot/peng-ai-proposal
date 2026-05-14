@@ -152,6 +152,39 @@ section:not(.hero):nth-child(even) { background: var(--gray); }
 /* SCHEDULE */
 .schedule-img { width: 100%; border-radius: 12px; margin-top: 1.5rem; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
 
+/* SCHEDULE TIMELINE */
+.schedule-header { margin-top: 1.5rem; background: var(--blue-dark); border-radius: 12px; padding: 1rem 1.25rem; }
+.schedule-title-row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: flex-start; justify-content: space-between; }
+.schedule-course-title { color: #fff; font-size: 0.95rem; font-weight: 700; }
+.schedule-course-sub { color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 0.2rem; }
+.schedule-badge { background: rgba(255,200,0,0.2); border: 1px solid rgba(255,200,0,0.5); color: #ffd700; border-radius: 999px; padding: 0.2rem 0.7rem; font-size: 0.7rem; font-weight: 700; white-space: nowrap; }
+
+.timeline { margin-top: 1.25rem; padding-left: 0; }
+.tl-item { display: grid; grid-template-columns: 90px 20px 1fr; gap: 0 0.75rem; margin-bottom: 0; position: relative; }
+.tl-time { font-size: 0.72rem; color: var(--blue-light); font-weight: 700; padding-top: 0.85rem; text-align: right; line-height: 1.3; }
+.tl-break .tl-time { color: #bbb; }
+.tl-dot {
+  width: 14px; height: 14px; border-radius: 50%; background: var(--blue-light);
+  margin-top: 0.95rem; position: relative; flex-shrink: 0; z-index: 1;
+}
+.tl-dot::after {
+  content: ''; position: absolute; left: 50%; top: 100%; transform: translateX(-50%);
+  width: 2px; background: var(--blue-pale); bottom: -24px;
+}
+.tl-item:last-child .tl-dot::after { display: none; }
+.tl-dot-break { background: #ddd; }
+.tl-dot-last { background: var(--accent); }
+.tl-content { background: #fff; border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 0.75rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.tl-break .tl-content { background: transparent; box-shadow: none; padding-left: 0; }
+.tl-content h4 { font-size: 0.9rem; color: var(--blue-dark); font-weight: 700; }
+.tl-content ul { margin-top: 0.4rem; padding-left: 1rem; }
+.tl-content li { font-size: 0.8rem; color: #555; line-height: 1.6; }
+
+.schedule-note { margin-top: 0.5rem; background: #fff8e1; border-left: 3px solid #ffc107; border-radius: 0 8px 8px 0; padding: 0.75rem 1rem; font-size: 0.82rem; color: #7a5c00; line-height: 1.6; }
+.schedule-compact { margin-top: 0.75rem; background: #fce4ec; border-left: 3px solid #e91e8c; border-radius: 0 8px 8px 0; padding: 0.75rem 1rem; font-size: 0.85rem; color: #880e4f; }
+.schedule-compact strong { display: block; margin-bottom: 0.2rem; }
+.schedule-compact p { font-size: 0.8rem; color: #ad1457; }
+
 /* PRICING */
 .pricing-grid { display: grid; gap: 1rem; margin-top: 1.5rem; }
 .price-card {
@@ -545,7 +578,87 @@ footer { background: #0a1f33; padding: 2rem 1.5rem; text-align: center; color: r
   <div class="section-label">課程規劃</div>
   <h2 class="section-title">預計<span>課綱與時程</span></h2>
   <p class="section-desc">涵蓋專案提案與執行流程 + 其他節省人力運用，循序漸進地導入 AI 工具。</p>
-  <img class="schedule-img" src="images/slide13_img01.jpg" alt="課綱時程表" onclick="openLightbox(this)" style="cursor:pointer">
+
+  <div class="schedule-header">
+    <div class="schedule-title-row">
+      <div>
+        <div class="schedule-course-title">8H 完整導入課程｜含 AI 助理建置</div>
+        <div class="schedule-course-sub">專案提案與執行 + 其他節省人力運用</div>
+      </div>
+      <div class="schedule-badge">目前初步評估｜非終版</div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time">09:00 – 10:00</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <h4>導入概念與工具設定</h4>
+        <ul>
+          <li>GPT / Claude / Gemini / Notebook LM 分工</li>
+          <li>插件、資料與使用情境設定</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">10:00 – 12:30</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <h4>提案前段實作</h4>
+        <ul>
+          <li>完案作 AI 助理建置</li>
+          <li>服務建議書圖文優化</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item tl-break">
+      <div class="tl-time">12:30 – 13:30</div>
+      <div class="tl-dot tl-dot-break"></div>
+      <div class="tl-content"><h4 style="color:#999">午休</h4></div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">13:30 – 15:30</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <h4>評選簡報與圖說預算</h4>
+        <ul>
+          <li>建議書轉評選簡報</li>
+          <li>面積計算 / 文件比對</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">15:30 – 17:30</div>
+      <div class="tl-dot"></div>
+      <div class="tl-content">
+        <h4>監造查核與知識留存</h4>
+        <ul>
+          <li>錄音轉逐字稿與重點整理</li>
+          <li>結案案件資料庫 / 網站維護</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">17:30 – 18:00</div>
+      <div class="tl-dot tl-dot-last"></div>
+      <div class="tl-content">
+        <h4>Q&amp;A 與落地分工</h4>
+        <ul>
+          <li>討論公司導入流程</li>
+          <li>分工 / 授權 / 後續追蹤</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="schedule-note">
+    ⚠️ 備註：以上課綱與時程為目前初步評估，將依廠商提供之實際案例、參與人數與是否建置 AI 助理調整，並非終版。
+  </div>
+  <div class="schedule-compact">
+    <strong>6H 精簡方案（不含 AI 助理）</strong>
+    <p>保留服務建議書、評選簡報、圖說預算、逐字稿整理等核心應用。</p>
+  </div>
 </section>
 
 <!-- PRICING -->
@@ -564,8 +677,7 @@ footer { background: #0a1f33; padding: 2rem 1.5rem; text-align: center; color: r
       <div class="price-card-body">
         <div class="price-item"><span class="label">Notebook LM + Gemini Advanced<br><small>5 人共用 1 組</small></span><span class="val">US$20/月</span></div>
         <div class="price-item"><span class="label">ChatGPT Plus<br><small>3 人共用 1 組</small></span><span class="val">US$20/月</span></div>
-        <div class="price-item"><span class="label">Claude Pro<br><small>主管共用</small></span><span class="val">US$20/月</span></div>
-        <div class="price-item"><span class="label">AI 助理<br><small>依人數需求調整</small></span><span class="val">另議</span></div>
+        <div class="price-item"><span class="label">Claude Pro<br><small>主管共用；AI 助理依人數另議</small></span><span class="val">US$20/月</span></div>
         <p class="service-note" style="margin-top:.75rem">將協助說明如何共用，藉此降低公司訂閱成本。</p>
       </div>
     </div>
@@ -622,13 +734,6 @@ footer { background: #0a1f33; padding: 2rem 1.5rem; text-align: center; color: r
     </div>
   </div>
 </section>
-
-<!-- CTA -->
-<div class="cta-section">
-  <h2>讓 AI 成為鵬程的競爭優勢</h2>
-  <p>從爬案到結案，每個環節都加速。<br>導入後提升的產出效率，勢必大於 AI 花費的月成本。</p>
-  <a class="cta-btn" href="mailto:">立即聯繫討論</a>
-</div>
 
 <!-- FOOTER -->
 <footer>
