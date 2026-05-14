@@ -80,8 +80,8 @@ nav {
 
 /* SECTIONS */
 section { padding: 3rem 1.25rem; }
-section:nth-child(odd) { background: #fff; }
-section:nth-child(even) { background: var(--gray); }
+section:not(.hero):nth-child(odd) { background: #fff; }
+section:not(.hero):nth-child(even) { background: var(--gray); }
 .section-label { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue-light); font-weight: 700; margin-bottom: 0.5rem; }
 .section-title { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; color: var(--blue-dark); line-height: 1.2; }
 .section-title span { color: var(--blue-light); }
@@ -134,6 +134,16 @@ section:nth-child(even) { background: var(--gray); }
   display: block;
 }
 .slide-imgs img:hover { transform: scale(1.02); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+.demo-link {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  margin-bottom: 1rem; padding: 0.55rem 1rem;
+  background: #fffbe6; border: 1px solid #f0c040; border-radius: 8px;
+  color: #7a5c00; font-size: 0.85rem; font-weight: 600; text-decoration: none;
+  transition: background 0.2s;
+}
+.demo-link:hover { background: #fff3b0; }
+.demo-links-row { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+
 .pending-badge {
   background: #fff8e1; border: 1px solid #ffc107; border-radius: 10px;
   padding: 1rem 1.25rem; color: #7a5c00; font-size: 0.88rem; display: flex; align-items: center; gap: 0.75rem;
@@ -376,6 +386,7 @@ footer { background: #0a1f33; padding: 2rem 1.5rem; text-align: center; color: r
     </div>
     <div class="app-card-body">
       <div class="result">✅ 確認 AI 助理可協助<strong>每天定時爬案件</strong>，知悉公司有豐富的篩選邏輯；可訓練 AI 學習公司的判斷標準，實現全自動化通知。</div>
+      <a class="demo-link" href="https://docs.google.com/spreadsheets/d/1t_1oTiSc9WAXqU0PoqXrjFHhgDBok1f1gL1N8DvbLeU/edit?gid=353106167#gid=353106167" target="_blank">📊 情境範例 — 開啟 Google 試算表</a>
       <div class="slide-imgs">
         <img src="images/slide03_img01.jpg" alt="爬案件截圖" onclick="openLightbox(this)">
       </div>
@@ -407,6 +418,7 @@ footer { background: #0a1f33; padding: 2rem 1.5rem; text-align: center; color: r
     </div>
     <div class="app-card-body">
       <div class="result">✅ 確認 AI 助理可直接依據建議書<strong>生成美化後的評選簡報</strong>，並支援直接編輯或透過指令進行調整。</div>
+      <a class="demo-link" href="https://notebooklm.google.com/notebook/e3b2267e-5dde-4968-9443-7de3fb4e6574/artifact/9dfdf365-d3bd-4663-94d0-6119df93c904?utm_source=nlm_web_share&utm_medium=google_oo&utm_campaign=art_share_1" target="_blank">📋 情境範例 — 開啟 NotebookLM 生成的簡報</a>
       <div class="slide-imgs">
         <img src="images/slide05_img01.jpg" alt="NotebookLM 截圖 1" onclick="openLightbox(this)">
         <img src="images/slide05_img02.jpg" alt="NotebookLM 截圖 2" onclick="openLightbox(this)">
@@ -483,6 +495,7 @@ footer { background: #0a1f33; padding: 2rem 1.5rem; text-align: center; color: r
     </div>
     <div class="app-card-body">
       <div class="result">✅ 以 1 小時 19 分鐘的 YouTube 影片作為測試範例，確認 AI 可協助轉換成完整的「<strong>逐字稿</strong>」與「<strong>重點整理</strong>」。</div>
+      <a class="demo-link" href="https://www.youtube.com/watch?v=GhACKbAVYXg" target="_blank">▶️ 範例來源 — YouTube 影片（1 小時 19 分）</a>
       <div class="slide-imgs">
         <img src="images/slide10_img01.jpg" alt="逐字稿截圖 1" onclick="openLightbox(this)">
         <img src="images/slide10_img02.jpg" alt="逐字稿截圖 2" onclick="openLightbox(this)">
@@ -499,6 +512,10 @@ footer { background: #0a1f33; padding: 2rem 1.5rem; text-align: center; color: r
     </div>
     <div class="app-card-body">
       <div class="result">✅ 確認可透過 AI 助理快速產製、調整網頁，提升公司網站 SEO 分數、<strong>降低網頁維運人力</strong>。</div>
+      <div class="demo-links-row">
+        <a class="demo-link" href="https://mikematw0316-labbot.github.io/" target="_blank">🌐 情境範例 1 — 公司形象頁</a>
+        <a class="demo-link" href="https://mikematw0316-labbot.github.io/tianzhong-park-proposal/" target="_blank">🌿 情境範例 2 — 田中公園建議書</a>
+      </div>
       <div class="slide-imgs">
         <img src="images/slide11_img01.jpg" alt="網站截圖 1" onclick="openLightbox(this)">
         <img src="images/slide11_img02.jpg" alt="網站截圖 2" onclick="openLightbox(this)">
